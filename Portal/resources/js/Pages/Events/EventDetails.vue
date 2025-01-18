@@ -39,21 +39,35 @@ const inviteForm = useForm({
     friendId: null
 })
 
+const kickUserForm = useForm({
+    eventId: props.event.id,
+    userId: null
+})
+
 const formatDate = (date) => {
-    return moment(String(date)).format('hh:mm DD.MM.YYYY');
+    return moment(String(date)).format('DD.MM.YYYY');
+}
+
+const formatHour = (date) => {
+    return moment(String(date)).format('HH:mm');
 }
 
 const submit = () => {
-    form.post(route('event.join'), {preserveScroll: true})
+    form.post(route('event.join'), { preserveScroll: true })
+}
+
+const kickUser = (userId) => {
+    kickUserForm.userId = userId;
+    kickUserForm.post(route('event.kick'), {preserveScroll: true})
 }
 
 const deleteEvent = () => {
-    form.delete(route('event.destroy', props.event), {preserveScroll: true})
+    form.delete(route('event.destroy', props.event), { preserveScroll: true })
 }
 
 const leaveEvent = (userId) => {
     acceptForm.userId = userId;
-    acceptForm.post(route('event.leave'), {preserveScroll: true})
+    acceptForm.post(route('event.leave'), { preserveScroll: true })
 }
 const showFriendsList = () => {
     friendsListVis.value = true;
@@ -65,12 +79,12 @@ const closeFriendsList = () => {
 
 const accept = (userId) => {
     acceptForm.userId = userId;
-    acceptForm.post(route('event.accept'), {preserveScroll: true})
+    acceptForm.post(route('event.accept'), { preserveScroll: true })
 }
 
 const handleInvite = (friendId) => {
     inviteForm.friendId = friendId;
-    inviteForm.post(route('event.invite'), {preserveScroll: true});
+    inviteForm.post(route('event.invite'), { preserveScroll: true });
 }
 
 const resetMessage = () => {
@@ -89,8 +103,13 @@ const resetMessage = () => {
     <PageFloatContainer>
         <div class="grid grid-cols-2 space-y-4">
             <h1 class="self-end text-2xl font-bold">{{ event.title }}</h1>
-            <h1 class="justify-self-end">Data wydarzenia: {{ formatDate(event.startDate) }} - {{
+            <div class="italic">
+                <h1 class="justify-self-end">{{ formatDate(event.startDate) }} - {{
                 formatDate(event.endDate) }}</h1>
+                <h1 class="justify-self-end">{{ formatHour(event.startDate) }} - {{
+                formatHour(event.endDate) }}</h1>
+            </div>
+
             <HorizontalSeparator class="col-span-2"></HorizontalSeparator>
             <img v-if="event.image" :src="'/storage/' + event.image" alt="Event Image"
                 class="object-cover rounded justify-self-center col-span-2 w-1/3" />
@@ -142,6 +161,11 @@ const resetMessage = () => {
                     <td>{{ user.name }}</td>
                     <td v-if="index == 0">Host</td>
                     <td v-else>Uczestnik</td>
+                    <td v-if="index !=0 && userStatus == 2">
+                        <form @submit.prevent="kickUser(user.id)">
+                            <ConfirmButton><i class="fa-solid fa-user-minus"></i></ConfirmButton>
+                        </form>
+                    </td>
                 </tr>
                 <tr>
                     <td class="justify-items-center" colspan="3">
@@ -167,7 +191,6 @@ const resetMessage = () => {
             <PopupMessage @closed="resetMessage" v-if="$page.props.flash.message" :message="$page.props.flash.message">
             </PopupMessage>
 
-            <!-- Popup window -->
             <div v-if="friendsListVis" class="popup-backdrop">
                 <PageFloatContainer class="w-96 min-w-56 z-0">
                     <div class="popup-header">

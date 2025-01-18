@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::post('events/join', [EventController::class, 'join'])->middleware('verified')->name('event.join');
     Route::post('events/accept', [EventController::class, 'accept'])->middleware('verified')->name('event.accept');
     Route::post('events/leave', [EventController::class, 'leave'])->middleware('verified')->name('event.leave');
+    Route::post('events/kick', [EventController::class, 'kick'])->middleware('verified')->name('event.kick');
     Route::post('event/invite',[InvitationController::class, 'sendInvitations'])->middleware('verified')->name('event.invite');
     Route::post('event/invite/accept',[InvitationController::class, 'acceptInvitation'])->middleware('verified')->name('event.invite.accept');
     Route::post('event/invite/reject',[InvitationController::class, 'rejectInvitation'])->middleware('verified')->name('event.invite.reject');

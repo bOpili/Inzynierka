@@ -1,10 +1,17 @@
 <script setup>
+import moment from "moment";
 import { defineProps } from "vue";
 
 
 const props = defineProps({
     event: Object,
 });
+
+const formatDate = (date) => {
+    return moment(String(date)).format('DD.MM.YYYY HH:mm');
+}
+
+
 </script>
 
 <style scoped>
@@ -38,9 +45,10 @@ const props = defineProps({
                     {{ tag.name }}
                 </span>
             </div>
-            <div class="flex justify-between items-center ">
-                <span><strong>Sloty:</strong> {{ event.users_count + '/' + event.slots }}</span>
+            <div class="grid justify-between items-center ">
+                <span><strong>Data:</strong> {{ formatDate(event.startDate)}}</span>
                 <span><strong>Gra:</strong> {{ event.game.title }}</span>
+                <span><strong>Sloty:</strong> {{ event.users_count + '/' + event.slots }}</span>
             </div>
         </div>
     </div>

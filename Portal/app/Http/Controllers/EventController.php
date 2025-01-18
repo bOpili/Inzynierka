@@ -71,6 +71,20 @@ class EventController extends Controller
         return back();
     }
 
+    public function kick(Request $request)
+    {
+        $event = Event::findOrFail($request->eventId);
+
+        $auth = Gate::inspect('kick', $event);
+
+        if ($auth->allowed()) {
+            $event->users()->detach($request->userId);
+            return back()->with('message', 'User kicked');
+        } else {
+            return redirect()->back()->with(['message' => $auth->message()]);
+        };
+    }
+
     public function accept(Request $request)
     {
         $event = Event::findOrFail($request->eventId);
@@ -161,7 +175,7 @@ class EventController extends Controller
             'Events/EventDetails',
             [
                 'event' => $event,
-                'users' => $event->users()->where('status', '>', 0)->select('profilepic','name')->orderBy('status', 'DESC')->get(),
+                'users' => $event->users()->where('status', '>', 0)->select('users.id','profilepic','name')->orderBy('status', 'DESC')->get(),
                 'userStatus' => $userStatus !== null ? $userStatus : -1,
                 'pendingUsers' => $event->users()->where('status', '=', 0)->select('profilepic','name')->get(),
                 'friends' => User::findOrFail(Auth::id())->friends()->select('users.id','profilepic','name')->get(),

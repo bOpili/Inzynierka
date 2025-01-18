@@ -51,6 +51,13 @@ class EventPolicy
             : Response::deny('You are not the creator of this event');
     }
 
+    public function kick(User $user, Event $event): Response
+    {
+        return $event->userStatus($user->id) === 2
+            ? Response::allow()
+            : Response::deny('You are not allowed to kick others from this event');
+    }
+
     public function invite(User $user, Event $event): Response
     {
         return $event->userStatus($user->id) > 0
