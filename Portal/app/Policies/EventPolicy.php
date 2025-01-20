@@ -72,6 +72,13 @@ class EventPolicy
             : Response::deny('You are not allowed to view IP and Password assigned to this event');
     }
 
+    public function seeMessages(User $user, Event $event): Response
+    {
+        return $event->userStatus($user->id) > 0
+            ? Response::allow()
+            : Response::deny('You are not allowed to see this event\' chat');
+    }
+
     /**
      * Determine whether the user can restore the model.
      */

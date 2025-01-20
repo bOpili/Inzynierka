@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationNumChange;
 use App\Models\FriendRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -30,6 +31,8 @@ class FriendController extends Controller
             'status' => 'pending',
         ]);
 
+        broadcast(new NotificationNumChange(User::findOrFail($receiverId)));
+
         return back()->with('message', 'Friend request sent successfully');
     }
 
@@ -50,6 +53,8 @@ class FriendController extends Controller
 
         $friendRequest->delete();
 
+        broadcast(new NotificationNumChange(User::findOrFail(Auth::id())));
+
         return back()->with('message', 'Friend request accepted');
     }
 
@@ -64,6 +69,8 @@ class FriendController extends Controller
 
         // $friendRequest->update(['status' => 'rejected']);
         $friendRequest->delete();
+
+        broadcast(new NotificationNumChange(User::findOrFail(Auth::id())));
 
         return back()->with('message','Friend request rejected');
     }

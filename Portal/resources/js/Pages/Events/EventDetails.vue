@@ -6,6 +6,7 @@ import PageFloatContainer from '../Components/PageFloatContainer.vue';
 import moment from 'moment';
 import PopupMessage from '../Components/PopupMessage.vue';
 import { ref } from 'vue';
+import ChatBox from '../Components/ChatBox.vue';
 
 var friendsListVis = ref(false);
 
@@ -187,6 +188,8 @@ const resetMessage = () => {
                     </td>
                 </tr>
             </table>
+
+            <ChatBox :eventId="props.event.id" v-if="userStatus > 0"></ChatBox>
 
             <PopupMessage @closed="resetMessage" v-if="$page.props.flash.message" :message="$page.props.flash.message">
             </PopupMessage>

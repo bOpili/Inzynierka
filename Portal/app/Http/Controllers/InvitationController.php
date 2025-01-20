@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationNumChange;
 use App\Models\Event;
 use App\Models\invitation;
 use App\Models\User;
@@ -47,6 +48,8 @@ class InvitationController extends Controller
         // Insert invitations into the database
         Invitation::insert($invitation);
 
+        broadcast(new NotificationNumChange(User::findOrFail($request->friendId)));
+
         return back();
     }
 
@@ -66,12 +69,17 @@ class InvitationController extends Controller
             return back()->with('message', 'No empty slots');
         }
 
+        broadcast(new NotificationNumChange(User::findOrFail(Auth::id())));
+
         return back();
     }
 
     public function rejectInvitation(Request $request)
     {
         invitation::findOrFail($request->id)->delete();
+
+        broadcast(new NotificationNumChange(User::findOrFail(Auth::id())));
+
         return back();
     }
 }

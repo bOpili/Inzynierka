@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FriendController;
 use App\Http\Controllers\InvitationController;
@@ -43,7 +44,10 @@ Route::middleware('auth')->group(function () {
     Route::post('event/invite',[InvitationController::class, 'sendInvitations'])->middleware('verified')->name('event.invite');
     Route::post('event/invite/accept',[InvitationController::class, 'acceptInvitation'])->middleware('verified')->name('event.invite.accept');
     Route::post('event/invite/reject',[InvitationController::class, 'rejectInvitation'])->middleware('verified')->name('event.invite.reject');
+    Route::get('event/{event}/messages',[ChatController::class, 'fetchMessages'])->middleware('verified')->name('event.messages.fetch');
+    Route::post('event/{event}/messages',[ChatController::class, 'sendMessage'])->middleware('verified')->name('event.messages.send');
     Route::resource('event',EventController::class)->except('index');
+
 });
 
 

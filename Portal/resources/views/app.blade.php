@@ -22,4 +22,10 @@
 
 </html>
 
+<script>
 
+    window.User = {
+        id: {{auth()->id() ? auth()->id() : -1}}
+    }
+
+</script>
