@@ -51,7 +51,7 @@ class AuthController extends Controller
         if (Auth::attempt($fields, $request->remember)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/')->with('message', 'Welcome back');
+            return redirect()->intended('/')->with('message', 'Welcome back '.Auth::user()->name);
         }
 
         return back()->withErrors([

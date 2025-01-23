@@ -24,8 +24,8 @@ class ChatController extends Controller
 
         // Fetch messages for the event
         return Message::where('event_id', $eventId)
-            ->with('sender:id,name') // Include sender's name
-            ->latest()
+            ->select('message','sender_id')
+            ->with('sender:id,name,profilepic') // Include sender's name
             ->take(50) // Fetch the last 50 messages
             ->get();
     }

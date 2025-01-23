@@ -29,7 +29,7 @@ class MessageSent implements ShouldBroadcastNow
     {
         $this->message = $message;
         $this->messageContent = $message->message;
-        $this->sender = User::findOrFail($message->sender_id);
+        $this->sender = User::where('id',$message->sender_id)->select(['id','name','profilepic'])->first();
     }
 
     public function broadcastWith(): array{

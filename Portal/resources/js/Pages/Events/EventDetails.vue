@@ -25,12 +25,7 @@ const form = useForm({
 
 })
 
-const acceptForm = useForm({
-    eventId: props.event.id,
-    userId: null
-})
-
-const leaveForm = useForm({
+const acceptLeaveForm = useForm({
     eventId: props.event.id,
     userId: null
 })
@@ -67,8 +62,8 @@ const deleteEvent = () => {
 }
 
 const leaveEvent = (userId) => {
-    acceptForm.userId = userId;
-    acceptForm.post(route('event.leave'), { preserveScroll: true })
+    acceptLeaveForm.userId = userId;
+    acceptLeaveForm.post(route('event.leave'), { preserveScroll: true })
 }
 const showFriendsList = () => {
     friendsListVis.value = true;
@@ -79,8 +74,8 @@ const closeFriendsList = () => {
 }
 
 const accept = (userId) => {
-    acceptForm.userId = userId;
-    acceptForm.post(route('event.accept'), { preserveScroll: true })
+    acceptLeaveForm.userId = userId;
+    acceptLeaveForm.post(route('event.accept'), { preserveScroll: true })
 }
 
 const handleInvite = (friendId) => {
@@ -189,8 +184,6 @@ const resetMessage = () => {
                 </tr>
             </table>
 
-            <ChatBox :eventId="props.event.id" v-if="userStatus > 0"></ChatBox>
-
             <PopupMessage @closed="resetMessage" v-if="$page.props.flash.message" :message="$page.props.flash.message">
             </PopupMessage>
 
@@ -223,6 +216,7 @@ const resetMessage = () => {
 
     </PageFloatContainer>
 
+    <ChatBox :eventId="props.event.id" v-if="userStatus > 0"></ChatBox>
 
 </template>
 
