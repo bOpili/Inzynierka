@@ -9,6 +9,7 @@ use App\Models\Game;
 use App\Models\Invitation;
 use App\Models\Tag;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -111,13 +112,14 @@ class EventController extends Controller
      */
     public function store(StoreEventRequest $request)
     {
+
         $fields = $request->validate([
             "title" => ['required', 'max:255'],
             "description" => ['required'],
             "slots" => ['required', 'int'],
             "image" => ['nullable', 'file', 'max:3072', 'mimes:jpeg,jpg,png,webp'],
-            "startDate" => ['required'],
-            "endDate" => ['required'],
+            "startDate" => ['required','date','after:now'],
+            "endDate" => ['required','date','after:startDate'],
             "game_id" => ['required'],
             "ip" => ['required', 'ipv4'],
             "password" => ['required'],

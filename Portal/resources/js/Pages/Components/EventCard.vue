@@ -1,14 +1,17 @@
 <script setup>
-import moment from "moment";
+import moment from "moment-timezone";
 import { defineProps } from "vue";
 
 
 const props = defineProps({
     event: Object,
+    userTimezone: String,
 });
 
+console.log(props.userTimezone)
+
 const formatDate = (date) => {
-    return moment(String(date)).format('DD.MM.YYYY HH:mm');
+    return moment.utc(date).tz(props.userTimezone).format('DD.MM.YYYY HH:mm');
 }
 
 

@@ -274,7 +274,7 @@ const endDragging = () => {
             </button>
         </div>
 
-        <div v-else-if="currentView === 'week'" class="grid grid-cols-7 place-items-center overflow-auto overscroll-contain scrollable">
+        <div v-else-if="currentView === 'week'" class="grid grid-cols-7 place-items-center overflow-auto scrollbar-hide overscroll-contain scrollable">
             <div v-for="day in daysInWeek" :key="day.format('YYYY-MM-DD')"
             :class="['p-2 w-full relative', day.isSame(today, 'day') ? 'bg-orange-500 bg-opacity-25' : '']">
 

@@ -3,7 +3,7 @@ import { useForm } from '@inertiajs/vue3';
 import ConfirmButton from '../Components/ConfirmButton.vue';
 import HorizontalSeparator from '../Components/HorizontalSeparator.vue';
 import PageFloatContainer from '../Components/PageFloatContainer.vue';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PopupMessage from '../Components/PopupMessage.vue';
 import { ref } from 'vue';
 import ChatBox from '../Components/ChatBox.vue';
@@ -17,8 +17,8 @@ const props = defineProps({
     friends: Array,
     userStatus: Number,
     joinMessage: String,
+    auth: Object
 })
-
 
 const form = useForm({
     eventId: props.event.id,
@@ -41,11 +41,11 @@ const kickUserForm = useForm({
 })
 
 const formatDate = (date) => {
-    return moment(String(date)).format('DD.MM.YYYY');
+    return moment.utc(date).tz(props.auth.user.timezone).format('DD.MM.YYYY');
 }
 
 const formatHour = (date) => {
-    return moment(String(date)).format('HH:mm');
+    return moment.utc(date).tz(props.auth.user.timezone).format('HH:mm');
 }
 
 const submit = () => {
@@ -65,12 +65,10 @@ const leaveEvent = (userId) => {
     acceptLeaveForm.userId = userId;
     acceptLeaveForm.post(route('event.leave'), { preserveScroll: true })
 }
-const showFriendsList = () => {
-    friendsListVis.value = true;
-}
 
-const closeFriendsList = () => {
-    friendsListVis.value = false;
+
+const changeFriendsListVisible = () => {
+    friendsListVis.value = !friendsListVis.value
 }
 
 const accept = (userId) => {
@@ -166,7 +164,7 @@ const resetMessage = () => {
                 <tr>
                     <td class="justify-items-center" colspan="3">
                         <div v-if="userStatus > 0">
-                            <ConfirmButton @click.prevent="showFriendsList">Invite Friends</ConfirmButton>
+                            <ConfirmButton @click.prevent="changeFriendsListVisible">Invite Friends</ConfirmButton>
                         </div>
                     </td>
                 </tr>
@@ -191,10 +189,11 @@ const resetMessage = () => {
                 <PageFloatContainer class="w-96 min-w-56 z-0">
                     <div class="popup-header">
                         <h3 class="popup-title">Friends List</h3>
-                        <button @click="closeFriendsList" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+                        <button @click="changeFriendsListVisible" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
                     </div>
                     <div>
                         <ul>
+                            <p v-show="friends.length == 0">You have no friends :(</p>
                             <li v-for="friend in friends" :key="friend.id" class="user-item">
                                 <span><img class="object-fill ring-1 ring-amber-800 size-11 rounded-full shadow-lg "
                                         :src="'/storage/' + friend.profilepic"

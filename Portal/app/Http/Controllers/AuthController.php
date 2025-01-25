@@ -18,11 +18,13 @@ class AuthController extends Controller
         ]);
     }
     public function register(Request $request){
+
         // Validate
         $fields = $request->validate([
             'name' => ['required', 'max:32', 'unique:users'],
             'email' => ['required', 'max:128', 'email', 'unique:users'],
             'password' => ['required', 'confirmed'],
+            'timezone' => ['required','timezone']
         ]);
 
         $fields['profilepic'] = 'ProfilePictures/defaultpfp.jpg';

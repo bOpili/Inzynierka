@@ -10,15 +10,26 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function changePfp(Request $request){
+    public function showDashboard() {
+        return Inertia::render('Auth/Dashboard',['user' => User::findOrFail(Auth::id())]);
+    }
+
+
+    public function editProfile(Request $request){
         $request->validate([
-            'pfp' => ['file', 'nullable']
+            'pfp' => ['file', 'nullable'],
+            'timezone' => ['timezone']
         ]);
 
         if ($request->hasFile('pfp')) {
             $pfp = Storage::disk('public')->put('ProfilePictures',$request->pfp);
-            User::find(Auth::id())->update(['profilepic' => $pfp]);
+            User::findOrFail(Auth::id())->update(['profilepic' => $pfp]);
         }
+
+        if ($request->timezone){
+            User::findOrFail(Auth::id())->update(['timezone' => $request->timezone]);
+        }
+
     }
 
     public function showUsers(){

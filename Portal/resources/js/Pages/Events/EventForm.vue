@@ -11,6 +11,7 @@ import ImageInput from '../Components/ImageInput.vue';
 import SelectInput from '../Components/SelectInput.vue';
 import TagSelector from '../Components/TagSelector.vue';
 import EventDateSelector from '../Components/EventDateSelector.vue';
+import moment from 'moment-timezone';
 
 const form = useForm({
     title: null,
@@ -27,6 +28,8 @@ const form = useForm({
 
 
 const submit = () => {
+    form.startDate = (new moment(form.startDate).utc()).format('YYYY-MM-DD HH:mm:ss');
+    form.endDate = (new moment(form.endDate).utc()).format('YYYY-MM-DD HH:mm:ss');
     form.post(route('event.store'))
 }
 
@@ -61,9 +64,9 @@ defineProps({
         <div class="flex justify-center my-2 space-x-32 mx-14">
             <form @submit.prevent="submit" class="grid grid-cols-3 w-full gap-3">
                 <h1 class="col-span-3 justify-self-center mb-4 text-xl">Stwórz wydarzenie</h1>
-                <!-- <div v-for="error in $page.props.errors">
+                <div v-for="error in $page.props.errors">
                     <p class="text-red-500">{{ error }}</p>
-                </div> -->
+                </div>
                 <TextInput class="col-span-3" name="Title" v-model="form.title" :message="form.errors.title"
                     label="Nazwa wydarzenia"></TextInput>
                 <TextareaInput class="col-span-2" name="Opis" v-model="form.description"
@@ -75,7 +78,7 @@ defineProps({
                 <NumberInput name="Slots" v-model="form.slots" :message="form.errors.slots" label="Liczba miejsc"></NumberInput>
                 <TextInput name="ServerIP" v-model="form.ip" :message="form.errors.ip" label="Server IP adress"></TextInput>
                 <TextInput name="Password" v-model="form.password" :message="form.errors.password" label="Server password"></TextInput>
-                <EventDateSelector class="col-span-3 p-2 " @selectedEventTimeframe="handleSelectedPeriod"></EventDateSelector>
+                <EventDateSelector class="col-span-3 p-2" @selectedEventTimeframe="handleSelectedPeriod"></EventDateSelector>
                 <div class="justify-self-center mt-4 col-span-3">
                     <ConfirmButton :disabled="form.processing">Potwierdź</ConfirmButton>
                 </div>

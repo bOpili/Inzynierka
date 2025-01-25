@@ -15,8 +15,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout',[AuthController::class, 'logout'])->name('logout');
 
     //---Dashboard---//
-    Route::post('/dashboard',[UserController::class, 'changePfp'])->middleware('verified')->name('changePfp');
-    Route::inertia('/dashboard', 'Auth/Dashboard')->middleware('verified')->name('dashboard');
+    Route::post('/dashboard',[UserController::class, 'editProfile'])->middleware('verified')->name('editProfile');
+    Route::get('/dashboard', [UserController::class, 'showDashboard'])->middleware('verified')->name('dashboard');
 
     //---Email verification---//
     Route::get('/email/verify', [AuthController::class, 'notice'])->name('verification.notice');

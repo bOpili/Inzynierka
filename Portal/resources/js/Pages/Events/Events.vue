@@ -3,21 +3,16 @@
 import EventCard from '../Components/EventCard.vue';
 import NavButton from '../Components/NavButton.vue';
 import PageFloatContainer from '../Components/PageFloatContainer.vue';
-import PopupMessage from '../Components/PopupMessage.vue';
 import HorizontalSeparator from '../Components/HorizontalSeparator.vue';
 
 
-defineProps({
+
+const props = defineProps({
     events: Object,
-    // joinMessage: String,
 })
 
 
 
-// // Function to reset the message and hide the popup
-// const resetMessage = () => {
-//   location.reload();
-// };
 
 </script>
 
@@ -35,17 +30,15 @@ defineProps({
         </div>
         <HorizontalSeparator></HorizontalSeparator>
         <div class="flex flex-row flex-wrap grow-0 gap-4 justify-around justify-items-center">
-            <div v-if="events.data.length > 0" v-for="event in events.data" :key="event.id">
+            <div v-if="events.data.length > 0" v-for="event in props.events.data" :key="event.id">
                 <a :href="route('event.show', event.id)">
-                    <EventCard :event="event"></EventCard>
+                    <EventCard :event="event" :userTimezone="$page.props.auth.user.timezone"></EventCard>
                 </a>
             </div>
             <div v-else class="grid grid-cols-1 text-center">
                 <p>Brak wydarzeń</p>
             </div>
         </div>
-
-        <!-- <PopupMessage @closed="resetMessage" v-if="joinMessage" :message="joinMessage"></PopupMessage> -->
 
 
     </PageFloatContainer>
