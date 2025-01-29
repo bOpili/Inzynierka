@@ -6,23 +6,16 @@ use App\Models\Event;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Models\Game;
-use App\Models\Invitation;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class EventController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $events = Event::latest()->withCount(['users'])->paginate(6);
@@ -44,7 +37,6 @@ class EventController extends Controller
             return back()->with('message', 'Brak wolnych miejsc');
         }
 
-        // Check if the user has overlapping events
         $overlappingEvent = $user->events()
             ->where(function ($query) use ($event) {
                 $query->where('startDate', '<', $event->endDate)
@@ -98,26 +90,21 @@ class EventController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return Inertia::render('Events/EventForm', ['tags' => Tag::get(), 'games' => Game::get()]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreEventRequest $request)
     {
+
         $fields = $request->validate([
             "title" => ['required', 'max:255'],
             "description" => ['required'],
             "slots" => ['required', 'int'],
             "image" => ['nullable', 'file', 'max:3072', 'mimes:jpeg,jpg,png,webp'],
-            "startDate" => ['required'],
-            "endDate" => ['required'],
+            "startDate" => ['required','date','after:now'],
+            "endDate" => ['required','date','after:startDate'],
             "game_id" => ['required'],
             "ip" => ['required', 'ipv4'],
             "password" => ['required'],
@@ -145,9 +132,6 @@ class EventController extends Controller
         return redirect()->route('events');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Event $event)
     {
         $userStatus = $event->userStatus(Auth::id());
@@ -183,25 +167,16 @@ class EventController extends Controller
         );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Event $event)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateEventRequest $request, Event $event)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Event $event)
     {
 

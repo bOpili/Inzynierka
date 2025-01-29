@@ -3,9 +3,10 @@ import { useForm } from '@inertiajs/vue3';
 import ConfirmButton from '../Components/ConfirmButton.vue';
 import HorizontalSeparator from '../Components/HorizontalSeparator.vue';
 import PageFloatContainer from '../Components/PageFloatContainer.vue';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PopupMessage from '../Components/PopupMessage.vue';
 import { ref } from 'vue';
+import ChatBox from '../Components/ChatBox.vue';
 
 var friendsListVis = ref(false);
 
@@ -16,20 +17,15 @@ const props = defineProps({
     friends: Array,
     userStatus: Number,
     joinMessage: String,
+    auth: Object
 })
-
 
 const form = useForm({
     eventId: props.event.id,
 
 })
 
-const acceptForm = useForm({
-    eventId: props.event.id,
-    userId: null
-})
-
-const leaveForm = useForm({
+const acceptLeaveForm = useForm({
     eventId: props.event.id,
     userId: null
 })
@@ -45,11 +41,11 @@ const kickUserForm = useForm({
 })
 
 const formatDate = (date) => {
-    return moment(String(date)).format('DD.MM.YYYY');
+    return moment.utc(date).tz(props.auth.user.timezone).format('DD.MM.YYYY');
 }
 
 const formatHour = (date) => {
-    return moment(String(date)).format('HH:mm');
+    return moment.utc(date).tz(props.auth.user.timezone).format('HH:mm');
 }
 
 const submit = () => {
@@ -66,20 +62,18 @@ const deleteEvent = () => {
 }
 
 const leaveEvent = (userId) => {
-    acceptForm.userId = userId;
-    acceptForm.post(route('event.leave'), { preserveScroll: true })
-}
-const showFriendsList = () => {
-    friendsListVis.value = true;
+    acceptLeaveForm.userId = userId;
+    acceptLeaveForm.post(route('event.leave'), { preserveScroll: true })
 }
 
-const closeFriendsList = () => {
-    friendsListVis.value = false;
+
+const changeFriendsListVisible = () => {
+    friendsListVis.value = !friendsListVis.value
 }
 
 const accept = (userId) => {
-    acceptForm.userId = userId;
-    acceptForm.post(route('event.accept'), { preserveScroll: true })
+    acceptLeaveForm.userId = userId;
+    acceptLeaveForm.post(route('event.accept'), { preserveScroll: true })
 }
 
 const handleInvite = (friendId) => {
@@ -170,7 +164,7 @@ const resetMessage = () => {
                 <tr>
                     <td class="justify-items-center" colspan="3">
                         <div v-if="userStatus > 0">
-                            <ConfirmButton @click.prevent="showFriendsList">Invite Friends</ConfirmButton>
+                            <ConfirmButton @click.prevent="changeFriendsListVisible">Invite Friends</ConfirmButton>
                         </div>
                     </td>
                 </tr>
@@ -195,10 +189,11 @@ const resetMessage = () => {
                 <PageFloatContainer class="w-96 min-w-56 z-0">
                     <div class="popup-header">
                         <h3 class="popup-title">Friends List</h3>
-                        <button @click="closeFriendsList" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+                        <button @click="changeFriendsListVisible" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
                     </div>
                     <div>
                         <ul>
+                            <p v-show="friends.length == 0">You have no friends :(</p>
                             <li v-for="friend in friends" :key="friend.id" class="user-item">
                                 <span><img class="object-fill ring-1 ring-amber-800 size-11 rounded-full shadow-lg "
                                         :src="'/storage/' + friend.profilepic"
@@ -220,11 +215,11 @@ const resetMessage = () => {
 
     </PageFloatContainer>
 
+    <ChatBox :eventId="props.event.id" v-if="userStatus > 0"></ChatBox>
 
 </template>
 
 <style scoped>
-/* Backdrop for popup */
 .popup-backdrop {
     position: fixed;
     top: 0;
@@ -237,7 +232,6 @@ const resetMessage = () => {
     z-index: 500;
 }
 
-/* Popup content container */
 .popup-content {
     background: rgb(249 115 22);
     padding: 20px;
@@ -247,7 +241,6 @@ const resetMessage = () => {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Header section */
 .popup-header {
     display: flex;
     justify-content: space-between;
@@ -255,7 +248,6 @@ const resetMessage = () => {
     margin-bottom: 15px;
 }
 
-/* Close button */
 .close-btn {
     background: none;
     border: none;
@@ -263,32 +255,10 @@ const resetMessage = () => {
     cursor: pointer;
 }
 
-/* User item styling */
 .user-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
-}
-
-.btn {
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    color: #fff;
-}
-
-.btn:hover {
-    opacity: 0.9;
 }
 </style>

@@ -86,7 +86,7 @@ const resetMessage = () => {
             <tr v-for="request in props.requests">
                 <td><img class="object-fill ring-1 ring-amber-800 size-11 rounded-full shadow-lg "
                         :src="'storage/' + request.sender.profilepic" alt="Request sender profile picture" /></td>
-                <td>{{ request.sender.name }}</td>
+                <td>{{ request.sender.name }} wants to be yout friend</td>
                 <td>
                     <ConfirmButton @click="acceptRequest(request.id)"><i class="fa-solid fa-check"></i></ConfirmButton>
                 </td>

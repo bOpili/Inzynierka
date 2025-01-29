@@ -6,8 +6,15 @@ import { switchTheme } from '../theme';
 import NavButton from '../Pages/Components/NavButton.vue';
 import NavIcon from '../Pages/Components/NavIcon.vue';
 import { ref } from 'vue';
+import moment from 'moment-timezone';
 
 var theme = ref("dark");
+
+const props = defineProps({
+    notificationNumber: Number,
+})
+
+let non = ref(props.notificationNumber);
 
 const handleThemeSwitch = () => {
     if(theme.value == 'light'){
@@ -16,8 +23,14 @@ const handleThemeSwitch = () => {
         theme.value = 'light';
     }
     switchTheme();
-
 }
+
+if(window.User.id != -1){
+    Echo.private('user.'+ (window.User.id)).listen('NotificationNumChange', (event) => {
+        non.value = event.non;
+    })
+}
+
 
 
 </script>
@@ -48,12 +61,11 @@ const handleThemeSwitch = () => {
                     </Link>
                     <NavIcon routeName="users">
                         <i class="fa-solid fa-users"></i>
-                        <span v-show="$page.props.notificationNumber != 0" class="notificationsNumber">{{ $page.props.notificationNumber }}</span>
+                        <span v-show="non != 0" class="notificationsNumber">{{ non }}</span>
                     </NavIcon>
                     <NavButton routeName="logout" method="post">Wyloguj</NavButton>
                 </div>
                 <div v-else class="flex flex-wrap">
-                    <!-- <NavButton routeName="register" text="Rejestracja" pageComp="Register">Rejestracja</NavButton> -->
                     <NavButton routeName="login" text="Logowanie" pageComp="Login">Logowanie</NavButton>
                 </div>
             </nav>

@@ -5,16 +5,20 @@ import TextInput from '../Components/TextInput.vue';
 import PageFloatContainer from '../Components/PageFloatContainer.vue';
 import ConfirmButton from '../Components/ConfirmButton.vue';
 import NavLink from '../Components/NavLink.vue';
+import TimezoneSelectInput from '../Components/TimezoneSelectInput.vue';
+import moment from 'moment-timezone';
 
 const form = useForm({
     name: null,
     email: null,
     password: null,
     password_confirmation: null,
+    timezone: moment.tz.guess(),
 })
 
-
 const submit = () => {
+    console.log(form.timezone)
+
     form.post(route('register'), {
         onError: () => form.reset("password", "password_confirmation"),
     })
@@ -36,6 +40,8 @@ const submit = () => {
                 <TextInput name="Password" type="password" v-model="form.password" :message="form.errors.password" label="Hasło">
                 </TextInput>
                 <TextInput name="Confirm password" type="password" v-model="form.password_confirmation" label="Potwierdź hasło"></TextInput>
+                <TimezoneSelectInput name="Timezone" :options="timezones" v-model="form.timezone" :message="form.errors.timezone"
+                    label="Select your timezone"></TimezoneSelectInput>
                 <div class="mt-4">
                     <h1 class="mb-4">Masz już konto? <NavLink routeName="login">Zaloguj się</NavLink></h1>
                 </div>

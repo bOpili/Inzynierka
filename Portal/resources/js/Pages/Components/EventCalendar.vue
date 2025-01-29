@@ -5,7 +5,7 @@ import { route } from '../../../../vendor/tightenco/ziggy/src/js';
 
 moment.updateLocale('en', {
     week: {
-        dow: 1, // Week starts on Monday
+        dow: 1,
         doy: 4,
     },
 });
@@ -15,7 +15,6 @@ const today = ref(moment());
 const currentView = ref('month');
 const selectedDay = ref(null);
 
-// Props: Receive events as a prop
 const props = defineProps({
     events: {
         type: Array,
@@ -23,9 +22,9 @@ const props = defineProps({
     },
 });
 
-const goToEvent = (eventId) => {
-    location.href(route('event.show', eventId))
-}
+// const goToEvent = (eventId) => {
+//     location.href(route('event.show', eventId))
+// }
 
 const dayHeaders = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
@@ -36,7 +35,6 @@ const momentEvents = props.events.map(e => ({
     endDate: moment(e.endDate),
 }));
 
-// Computed properties for generating days and time slots
 const daysInMonth = computed(() => {
     const start = currentMonth.value.clone().startOf('month').startOf('week');
     const end = currentMonth.value.clone().endOf('month').endOf('week');
@@ -77,7 +75,6 @@ const currentViewTitle = computed(() => {
     if (currentView.value === 'day') return selectedDay.value.format('MMMM D, YYYY');
 });
 
-// Navigation functions
 const goToPrevious = () => {
     if (currentView.value === 'month') {
         currentMonth.value = currentMonth.value.clone().subtract(1, 'month');
@@ -103,16 +100,16 @@ const goToMonthView = () => {
     currentView.value = 'month';
 };
 
-// Helper functions for event display
+
 const calculateTop = (event) => {
     const startHour = event.startDate.hour();
     const startMinute = event.startDate.minute();
-    return startHour * 72 + (startMinute / 60) * 72; // Assuming 36px per hour
+    return startHour * 72 + (startMinute / 60) * 72;
 };
 
 const calculateHeight = (event) => {
     const duration = event.endDate.diff(event.startDate, 'minutes');
-    return (duration / 60) * 72; // Assuming 36px per hour
+    return (duration / 60) * 72;
 };
 
 const filterEventsForDay = (day) => {
@@ -129,7 +126,7 @@ const filterEventsForDay = (day) => {
             <button @click="goToNext"><i class="fa-solid fa-angles-right"></i></button>
         </div>
 
-        <!-- Month View -->
+
         <div v-if="currentView === 'month'" class="grid grid-cols-7 place-items-center">
             <div class="text-md w-fit" v-for="header in dayHeaders" :key="header">
                 {{ header }}
@@ -145,18 +142,18 @@ const filterEventsForDay = (day) => {
             </button>
         </div>
 
-        <!-- Week View -->
+
         <div v-else-if="currentView === 'week'" class="grid grid-cols-7 place-items-center">
             <div v-for="day in daysInWeek" :key="day.format('YYYY-MM-DD')" class="p-2 w-full relative">
                 <h3 class="text-center mb-4">{{ day.format('ddd, MMM D') }}</h3>
                 <div class="relative">
-                    <!-- Hour slots -->
+
                     <div v-for="hour in hoursInDay" :key="hour"
                         class="h-9 border-b border-b-orange-600 text-xs select-none">
                         {{ hour }}
                     </div>
 
-                    <!-- Events -->
+
                     <Link v-for="event in filterEventsForDay(day)" :key="event.start"
                         :href="route('event.show', event.id)" :style="{
                             top: `${calculateTop(event)}px`,

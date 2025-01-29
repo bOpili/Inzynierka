@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('events', function (Blueprint $table) {
-            $table->string('ip')->nullable();
-            $table->text('password')->nullable();
+        Schema::create('messages', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('event_id')->onDelete('cascade');
+            $table->foreignId('sender_id')->onDelete('cascade');
+            $table->text('message');
+            $table->timestamps();
         });
     }
 
@@ -22,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('events', function (Blueprint $table) {
-            $table->dropColumn(['ip', 'password']);
-        });
+        Schema::dropIfExists('messages');
     }
 };

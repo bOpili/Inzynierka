@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FriendController;
 use App\Http\Controllers\InvitationController;
@@ -14,8 +15,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout',[AuthController::class, 'logout'])->name('logout');
 
     //---Dashboard---//
-    Route::post('/dashboard',[UserController::class, 'changePfp'])->middleware('verified')->name('changePfp');
-    Route::inertia('/dashboard', 'Auth/Dashboard')->middleware('verified')->name('dashboard');
+    Route::post('/dashboard',[UserController::class, 'editProfile'])->middleware('verified')->name('editProfile');
+    Route::get('/dashboard', [UserController::class, 'showDashboard'])->middleware('verified')->name('dashboard');
 
     //---Email verification---//
     Route::get('/email/verify', [AuthController::class, 'notice'])->name('verification.notice');
@@ -31,8 +32,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/friend-requests/accept/{id}', [FriendController::class, 'acceptRequest'])->name('friend.accept');
     Route::post('/friend-requests/reject/{id}', [FriendController::class, 'rejectRequest'])->name('friend.reject');
     Route::post('/friend/remove/{id}', [FriendController::class, 'removeFriend'])->name('friend.remove');
-    //Route::get('/friend-requests/pending', [FriendController::class, 'pendingRequests']);
-    //Route::get('/friends', [FriendController::class, 'friends']);
 
     //---Events---//
     Route::get('events', [EventController::class, 'index'])->middleware('verified')->name('events');
@@ -43,7 +42,10 @@ Route::middleware('auth')->group(function () {
     Route::post('event/invite',[InvitationController::class, 'sendInvitations'])->middleware('verified')->name('event.invite');
     Route::post('event/invite/accept',[InvitationController::class, 'acceptInvitation'])->middleware('verified')->name('event.invite.accept');
     Route::post('event/invite/reject',[InvitationController::class, 'rejectInvitation'])->middleware('verified')->name('event.invite.reject');
+    Route::get('event/{event}/messages',[ChatController::class, 'fetchMessages'])->middleware('verified')->name('event.messages.fetch');
+    Route::post('event/{event}/messages',[ChatController::class, 'sendMessage'])->middleware('verified')->name('event.messages.send');
     Route::resource('event',EventController::class)->except('index');
+
 });
 
 

@@ -1,6 +1,5 @@
 <script setup>
 
-import SessionMessage from './SessionMessage.vue';
 const model = defineModel({
     type: null,
     required: true,

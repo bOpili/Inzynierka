@@ -18,27 +18,22 @@ class AuthController extends Controller
         ]);
     }
     public function register(Request $request){
-        // Validate
+
         $fields = $request->validate([
             'name' => ['required', 'max:32', 'unique:users'],
             'email' => ['required', 'max:128', 'email', 'unique:users'],
             'password' => ['required', 'confirmed'],
+            'timezone' => ['required','timezone']
         ]);
 
         $fields['profilepic'] = 'ProfilePictures/defaultpfp.jpg';
 
-        // Register
         $user = User::create($fields);
 
-        // Login
         Auth::login($user);
 
-        // Send verification mail
         event(new Registered($user));
 
-        // $message = "Welcome to my inżynierka " . $user->name . ", na Twój adres mailowy został wysłany link weryfikacyjny";
-
-        // Redirect
         return redirect()->route('home')->with('message', "Welcome to my inżynierka " . $user->name . ", na Twój adres mailowy został wysłany link weryfikacyjny");
     }
 
@@ -51,7 +46,7 @@ class AuthController extends Controller
         if (Auth::attempt($fields, $request->remember)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/')->with('message', 'Welcome back');
+            return redirect()->intended('/')->with('message', 'Welcome back '.Auth::user()->name);
         }
 
         return back()->withErrors([

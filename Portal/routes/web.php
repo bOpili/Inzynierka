@@ -8,8 +8,3 @@ require __DIR__ . '/user/guest.php';
 //---Home page---//
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-
-
-
-
-
