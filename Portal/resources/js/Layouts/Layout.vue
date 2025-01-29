@@ -66,7 +66,6 @@ if(window.User.id != -1){
                     <NavButton routeName="logout" method="post">Wyloguj</NavButton>
                 </div>
                 <div v-else class="flex flex-wrap">
-                    <!-- <NavButton routeName="register" text="Rejestracja" pageComp="Register">Rejestracja</NavButton> -->
                     <NavButton routeName="login" text="Logowanie" pageComp="Login">Logowanie</NavButton>
                 </div>
             </nav>

@@ -16,10 +16,9 @@ class InvitationController extends Controller
     public function sendInvitations(Request $request)
     {
 
-        $user = User::findOrFail(Auth::id()); // Get the authenticated user
+        $user = User::findOrFail(Auth::id());
         $event = Event::findOrFail($request->eventId);
 
-        // Ensure the user is the event creator
         $auth = Gate::inspect('invite', $event);
 
         if (!($auth->allowed())) {
@@ -34,7 +33,6 @@ class InvitationController extends Controller
             return back()->withErrors(['msg' => 'User already participates']);
         }
 
-        // Prepare invitations using collections
         $invitation =
             [
                 'event_id' => $event->id,
@@ -45,10 +43,9 @@ class InvitationController extends Controller
                 'updated_at' => now(),
             ];
 
-        // Insert invitations into the database
         Invitation::insert($invitation);
 
-        broadcast(new NotificationNumChange(User::findOrFail($request->friendId)));
+        broadcast(new NotificationNumChange(User::first($request->friendId)));
 
         return back();
     }

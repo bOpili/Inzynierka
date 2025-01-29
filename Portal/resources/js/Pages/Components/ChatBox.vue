@@ -65,14 +65,12 @@ onMounted(() => {
 
 <template>
     <div class="fixed top-1/4 right-0 z-50 w-1/4">
-        <!-- Chat Bubble -->
         <div id="chat-bubble" class="grid justify-end">
             <i @click="toggleChat" class="fa-solid fa-message m-2 ring-1 text-center place-content-center text-white bg-orange-500 dark:bg-orange-700 ring-amber-800 p-2 size-11 rounded-full shadow-lg hover:bg-orange-600 dark:hover:bg-orange-800 hover:ring-amber-400 dark:hover:ring-amber-600">
                 <i v-show="unreadMessages == true && isChatOpen == false" class="notificationsNumber fa-solid fa-exclamation"></i>
             </i>
         </div>
 
-        <!-- Chat Box -->
         <div id="chat-box" class="backdrop-blur-lg " v-if="isChatOpen">
             <div class="flex-1 px-4 py-2 md:h-[20rem] h-[40rem] overflow-auto scrollbar-hide overscroll-contain" ref="chatContainer">
                 <div v-for="message in messages" :key="message.id" class="mb-2 text-md">

@@ -12,8 +12,8 @@ const currentMonth = ref(moment());
 const today = ref(moment());
 var currentView = ref('month');
 var selectedDay = ref(null);
-let eventDuration = ref(30); // Duration in minutes
-const events = ref([]); // Array to store created events
+let eventDuration = ref(30);
+const events = ref([]);
 const isResizing = ref(false);
 const resizingEvent = ref(null);
 const resizeStartY = ref(null);
@@ -144,12 +144,12 @@ const createEvent = (day, hour) => {
 const calculateTop = (event) => {
     const startHour = event.start.hour();
     const startMinute = event.start.minute();
-    return startHour * 72 + (startMinute / 60) * 72; // Assuming 36px per hour
+    return startHour * 72 + (startMinute / 60) * 72;
 };
 
 const calculateHeight = (event) => {
     const duration = event.end.diff(event.start, 'minutes');
-    return (duration / 60) * 72; // Assuming 36px per hour
+    return (duration / 60) * 72;
 };
 
 const startResizing = (event, e) => {
@@ -207,15 +207,15 @@ const startDragging = (event, e) => {
 };
 
 const handleDragging = (e) => {
-    if (!isDragging.value || !draggingEvent.value || isResizing.value) return; // Block dragging while resizing
+    if (!isDragging.value || !draggingEvent.value || isResizing.value) return;
 
     if (draggingEvent.value.end.minute() % 15 != 0) {
         draggingEvent.value.end.minute(draggingEvent.value.end.minute() + 1)
     }
 
     const deltaY = e.clientY - dragStartY.value;
-    const minutesPerPixel = 30 / 36; // 36px per hour
-    let minutesDelta = Math.round((deltaY * minutesPerPixel) / 15) * 15; // Round to nearest 15 minutes
+    const minutesPerPixel = 30 / 36;
+    let minutesDelta = Math.round((deltaY * minutesPerPixel) / 15) * 15;
 
 
     if (minutesDelta !== 0) {
@@ -282,7 +282,7 @@ const endDragging = () => {
         </div>
             <div v-for="day in daysInWeek" :key="day.format('YYYY-MM-DD')"
                 :class="['p-2 w-full relative', day.isSame(today, 'day') ? 'bg-orange-500 bg-opacity-25' : '']">
-                <div class="relative"> <!-- Container for hours -->
+                <div class="relative">
                     <div v-for="hour in hoursInDay" :key="hour"
                         :class="['h-9 border-b border-b-orange-600 text-xs select-none']"
                         @click="createEvent(day, hour)">

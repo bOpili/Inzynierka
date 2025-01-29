@@ -1,5 +1,4 @@
 <script setup>
-import { computed, ref } from 'vue';
 
 import { useForm } from '@inertiajs/vue3';
 import TextInput from '../Components/TextInput.vue';

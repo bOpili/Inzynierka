@@ -15,18 +15,16 @@ class ChatController extends Controller
     {
         $event = Event::findOrFail($eventId);
 
-        // Ensure the user is part of the event (add your own validation here)
         $canSeeMessage = Gate::inspect('seeMessages', $event);
 
         if($canSeeMessage->denied()){
             return redirect()->back()->with(['message' => $canSeeMessage->message()]);
         }
 
-        // Fetch messages for the event
         return Message::where('event_id', $eventId)
             ->select('message','sender_id')
-            ->with('sender:id,name,profilepic') // Include sender's name
-            ->take(50) // Fetch the last 50 messages
+            ->with('sender:id,name,profilepic')
+            ->take(50)
             ->get();
     }
 
@@ -42,7 +40,6 @@ class ChatController extends Controller
             'message' => $request->message,
         ]);
 
-        // Broadcast the message to other users in real-time
         broadcast(new MessageSent($message));
 
         return $message;

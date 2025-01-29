@@ -20,10 +20,8 @@ defineProps({
 });
 const emit = defineEmits(['closed'])
 
-// Local state for controlling visibility
 const isVisible = ref(true);
 
-// Method to close the popup
 const closePopup = () => {
     isVisible.value = false;
     emit('closed')
@@ -32,7 +30,6 @@ const closePopup = () => {
 </script>
 
 <style scoped>
-/* Styles for the popup */
 .popup-overlay {
     position: fixed;
     top: 0;

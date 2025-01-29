@@ -19,17 +19,17 @@ const emit = defineEmits(['confirmTags']);
 const handleTags = (tag) => {
     const index = selectedTags.value.indexOf(tag);
     if (index === -1) {
-        selectedTags.value.push(tag); // Add tag if not selected
+        selectedTags.value.push(tag);
     } else {
-        selectedTags.value.splice(index, 1); // Remove tag if already selected
+        selectedTags.value.splice(index, 1);
     }
-    emit('confirmTags', selectedTags.value); // Send selected tags to parent
+    emit('confirmTags', selectedTags.value);
 };
 </script>
 
 <template>
     <div class="mt-4">
-        <label class="mb-1">{{ label }}</label> <!-- // usunięto v-for="name" -->
+        <label class="mb-1">{{ label }}</label>
         <div class="flex flex-wrap gap-2">
             <button
                 v-for="tag in tags"
@@ -50,7 +50,6 @@ const handleTags = (tag) => {
 </template>
 
 <style scoped>
-/* Optional styling for hover and active states */
 button:hover {
     transform: scale(1.05);
     transition: transform 0.2s;

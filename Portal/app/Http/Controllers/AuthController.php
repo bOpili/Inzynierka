@@ -19,7 +19,6 @@ class AuthController extends Controller
     }
     public function register(Request $request){
 
-        // Validate
         $fields = $request->validate([
             'name' => ['required', 'max:32', 'unique:users'],
             'email' => ['required', 'max:128', 'email', 'unique:users'],
@@ -29,18 +28,12 @@ class AuthController extends Controller
 
         $fields['profilepic'] = 'ProfilePictures/defaultpfp.jpg';
 
-        // Register
         $user = User::create($fields);
 
-        // Login
         Auth::login($user);
 
-        // Send verification mail
         event(new Registered($user));
 
-        // $message = "Welcome to my inżynierka " . $user->name . ", na Twój adres mailowy został wysłany link weryfikacyjny";
-
-        // Redirect
         return redirect()->route('home')->with('message', "Welcome to my inżynierka " . $user->name . ", na Twój adres mailowy został wysłany link weryfikacyjny");
     }
 

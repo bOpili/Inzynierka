@@ -220,7 +220,6 @@ const resetMessage = () => {
 </template>
 
 <style scoped>
-/* Backdrop for popup */
 .popup-backdrop {
     position: fixed;
     top: 0;
@@ -233,7 +232,6 @@ const resetMessage = () => {
     z-index: 500;
 }
 
-/* Popup content container */
 .popup-content {
     background: rgb(249 115 22);
     padding: 20px;
@@ -243,7 +241,6 @@ const resetMessage = () => {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Header section */
 .popup-header {
     display: flex;
     justify-content: space-between;
@@ -251,7 +248,6 @@ const resetMessage = () => {
     margin-bottom: 15px;
 }
 
-/* Close button */
 .close-btn {
     background: none;
     border: none;
@@ -259,32 +255,10 @@ const resetMessage = () => {
     cursor: pointer;
 }
 
-/* User item styling */
 .user-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
-}
-
-.btn {
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    color: #fff;
-}
-
-.btn:hover {
-    opacity: 0.9;
 }
 </style>

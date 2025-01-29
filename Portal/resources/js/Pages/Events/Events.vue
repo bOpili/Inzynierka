@@ -5,14 +5,9 @@ import NavButton from '../Components/NavButton.vue';
 import PageFloatContainer from '../Components/PageFloatContainer.vue';
 import HorizontalSeparator from '../Components/HorizontalSeparator.vue';
 
-
-
 const props = defineProps({
     events: Object,
 })
-
-
-
 
 </script>
 

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->string('ip')->nullable(); // IP Address
-            $table->text('password')->nullable(); // Encrypted password
+            $table->string('ip')->nullable();
+            $table->text('password')->nullable();
         });
     }
 
