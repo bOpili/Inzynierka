@@ -16,11 +16,33 @@ use Inertia\Inertia;
 
 class EventController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $events = Event::latest()->withCount(['users'])->paginate(6);
+
+        $events = Event::when($request->tags, function ($query) use ($request) {
+            foreach ($request->tags as $tag) {
+                $query->whereHas('tags', function ($query) use ($tag) {
+                    $query->where('tags.id', $tag);
+                });
+            }
+        })->when($request->games, function ($query) use ($request) {
+            $query->whereIn('game_id', $request->games);
+        })->when(
+                $request->search,
+                function ($query) use ($request) {
+                    $query->where('title', 'like', "%" . $request->search . "%");
+                }
+            )->latest()->withCount(['users'])->paginate(3)->withQueryString();
         $events->load('game')->load('tags');
-        return Inertia::render('Events/Events', ['events' => $events, 'joinMessage' => session('joinMessage')], );
+        return Inertia::render('Events/Events', [
+            'events' => $events,
+            'joinMessage' => session('joinMessage'),
+            'tags' => Tag::get(),
+            'games' => Game::get(),
+            'searchValue' => $request->search ? $request->search : "",
+            'filteredTags' => $request->tags,
+            'filteredGames' => $request->games
+        ]);
     }
 
     public function join(Request $request)
@@ -74,7 +96,8 @@ class EventController extends Controller
             return back()->with('message', 'User kicked');
         } else {
             return redirect()->back()->with(['message' => $auth->message()]);
-        };
+        }
+        ;
     }
 
     public function accept(Request $request)
@@ -103,8 +126,8 @@ class EventController extends Controller
             "description" => ['required'],
             "slots" => ['required', 'int'],
             "image" => ['nullable', 'file', 'max:3072', 'mimes:jpeg,jpg,png,webp'],
-            "startDate" => ['required','date','after:now'],
-            "endDate" => ['required','date','after:startDate'],
+            "startDate" => ['required', 'date', 'after:now'],
+            "endDate" => ['required', 'date', 'after:startDate'],
             "game_id" => ['required'],
             "ip" => ['required', 'ipv4'],
             "password" => ['required'],
@@ -151,18 +174,18 @@ class EventController extends Controller
 
         $canSeeJoinFields = Gate::inspect('viewJoinCredentials', $event);
 
-        if($canSeeJoinFields->allowed()){
-            $event = $event->makeVisible(['ip','password']);
+        if ($canSeeJoinFields->allowed()) {
+            $event = $event->makeVisible(['ip', 'password']);
         }
 
         return Inertia::render(
             'Events/EventDetails',
             [
                 'event' => $event,
-                'users' => $event->users()->where('status', '>', 0)->select('users.id','profilepic','name')->orderBy('status', 'DESC')->get(),
+                'users' => $event->users()->where('status', '>', 0)->select('users.id', 'profilepic', 'name')->orderBy('status', 'DESC')->get(),
                 'userStatus' => $userStatus !== null ? $userStatus : -1,
-                'pendingUsers' => $event->users()->where('status', '=', 0)->select('profilepic','name')->get(),
-                'friends' => User::findOrFail(Auth::id())->friends()->select('users.id','profilepic','name')->get(),
+                'pendingUsers' => $event->users()->where('status', '=', 0)->select('profilepic', 'name')->get(),
+                'friends' => User::findOrFail(Auth::id())->friends()->select('users.id', 'profilepic', 'name')->get(),
             ]
         );
     }

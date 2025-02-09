@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationNumChange;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -34,7 +35,7 @@ class AuthController extends Controller
 
         event(new Registered($user));
 
-        return redirect()->route('home')->with('message', "Welcome to my inżynierka " . $user->name . ", na Twój adres mailowy został wysłany link weryfikacyjny");
+        return redirect()->route('home')->with('message', "Welcome " . $user->name . ", verifiaction mail has been send to Your address");
     }
 
     public function login(Request $request){
@@ -77,6 +78,6 @@ class AuthController extends Controller
     public function resend(Request $request){
         $request->user()->sendEmailVerificationNotification();
 
-        return back()->with('status', 'Link weryfikacyjny wysłany!');
+        return back()->with('status', 'Verification link sent!');
     }
 }

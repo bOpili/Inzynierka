@@ -91,7 +91,7 @@ const resetMessage = () => {
 
     <Head>
         <title> | {{ event.title }}</title>
-        <meta head-key="description" name="description" content="Szczegóły wydarzenia" />
+        <meta head-key="description" name="description" content="Event details" />
     </Head>
 
     <PageFloatContainer>
@@ -118,11 +118,11 @@ const resetMessage = () => {
                 {{ event.description }}
             </p>
             <p class="col-span-2">
-                <strong>Gra:</strong> {{ event.game.title }}
+                <strong>Game:</strong> {{ event.game.title }}
             </p>
 
             <p :class="event.ip ? 'col-span-2' : ''">
-                <strong>Sloty:</strong> {{ event.users_count + '/' + event.slots }}
+                <strong>Slots:</strong> {{ event.users_count + '/' + event.slots }}
             </p>
             <p v-if="event.ip" class="col-span-2"><strong>Server ip:</strong> {{ event.ip }}</p>
             <p v-if="event.password"><strong>Server password:</strong> {{ event.password }}</p>
@@ -132,7 +132,7 @@ const resetMessage = () => {
                 </form>
             </div>
             <div v-else-if="userStatus == 0" class="mt-4 justify-self-end">
-                <p>Host musi zaakceptować twoją prośbę o dołączenie</p>
+                <p>Event creator must accept Your request</p>
             </div>
             <div v-else-if="userStatus == 2" class="grid grid-cols-2">
                 <form @submit.prevent="deleteEvent">
@@ -141,20 +141,20 @@ const resetMessage = () => {
             </div>
             <div v-else class="mt-4 justify-self-end">
                 <form @submit.prevent="submit">
-                    <ConfirmButton>Dołącz</ConfirmButton>
+                    <ConfirmButton>Join</ConfirmButton>
                 </form>
             </div>
 
             <HorizontalSeparator class="col-span-2"></HorizontalSeparator>
-            <h1 :class="(userStatus == 2) ? 'col-span-1' : 'col-span-2'">Uczestnicy:</h1>
-            <h1 v-if="userStatus == 2">Uczestnicy oczekujący:</h1>
+            <h1 :class="(userStatus == 2) ? 'col-span-1' : 'col-span-2'">Participants:</h1>
+            <h1 v-if="userStatus == 2">Awaiting users:</h1>
             <table class="table-auto border-separate border-spacing-4">
                 <tr v-for="(user, index) in props.users">
                     <td><img class="object-fill ring-1 ring-amber-800 size-11 rounded-full shadow-lg "
                             :src="'/storage/' + user.profilepic" alt="Current user profile picture" /></td>
                     <td>{{ user.name }}</td>
                     <td v-if="index == 0">Host</td>
-                    <td v-else>Uczestnik</td>
+                    <td v-else>Participant</td>
                     <td v-if="index !=0 && userStatus == 2">
                         <form @submit.prevent="kickUser(user.id)">
                             <ConfirmButton><i class="fa-solid fa-user-minus"></i></ConfirmButton>
@@ -230,15 +230,6 @@ const resetMessage = () => {
     justify-content: center;
     align-items: center;
     z-index: 500;
-}
-
-.popup-content {
-    background: rgb(249 115 22);
-    padding: 20px;
-    border-radius: 10px;
-    width: 300px;
-    color: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .popup-header {

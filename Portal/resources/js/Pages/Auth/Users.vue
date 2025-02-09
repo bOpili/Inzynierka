@@ -1,6 +1,6 @@
 <script setup>
 
-import { useForm } from '@inertiajs/vue3';
+import { router, useForm } from '@inertiajs/vue3';
 import ConfirmButton from '../Components/ConfirmButton.vue';
 import FilterInput from '../Components/FilterInput.vue';
 import PageFloatContainer from '../Components/PageFloatContainer.vue';
@@ -58,10 +58,8 @@ const removeFriend = (id) => {
     friendRemove.post(route('friend.remove', id));
 }
 
-
-
 const resetMessage = () => {
-    location.reload();
+    router.get('/users');
 };
 
 </script>
@@ -76,7 +74,7 @@ const resetMessage = () => {
         <div class="flex flex-row justify-between items-center">
             <p class="text-lg">Friends list</p>
             <form @submit.prevent="submit" class="flex flex-row space-x-2">
-                <FilterInput label="Find user by name" type="text" v-model="form.Name" name="Username">
+                <FilterInput label="Find user by name" type="search" v-model="form.Name" name="Username">
                 </FilterInput>
                 <ConfirmButton>Search</ConfirmButton>
             </form>

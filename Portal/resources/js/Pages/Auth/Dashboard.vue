@@ -38,19 +38,19 @@ const submit = () => {
 <template>
 
     <Head>
-        <title> | Panel użytkownika</title>
+        <title> | User dashboard</title>
     </Head>
 
     <PageFloatContainer>
         <div class="flex flex-col space-y-2">
             <div>
-                <h1 class="text-xl font-bold">Cześć {{ $page.props.auth.user.name }}</h1>
+                <h1 class="text-xl font-bold">Hello {{ $page.props.auth.user.name }}</h1>
             </div>
-            <h1 class="text-lg font-semibold">Szczegóły profilu</h1>
+            <h1 class="text-lg font-semibold">Profile details</h1>
             <form @submit.prevent="submit" class="flex flex-col space-y-2 max-w-xs">
                 <div class="flex flex-col">
                     <div class="ms-4 mt-1">
-                        <p>Zdjęcie profilowe</p>
+                        <p>Profile picture</p>
                         <div class="cursor-pointer w-32 h-32 border border-orange-800 rounded-full overflow-hidden">
                             <div class="flex items-center justify-center h-full text-gray-500">
                                 <label for="pfp" class="h-full w-full"><img class="h-full w-full"
@@ -62,13 +62,12 @@ const submit = () => {
                     </div>
                     <div class="ms-4 mt-1">
                         <p>Time zone</p>
-
                             <TimezoneSelectInput name="Timezone" v-model="form.timezone"
                                 :message="form.errors.timezone"></TimezoneSelectInput>
                     </div>
                 </div>
                 <div>
-                    <ConfirmButton>Zatwierdź zmiany</ConfirmButton>
+                    <ConfirmButton>Confirm changes</ConfirmButton>
                 </div>
             </form>
         </div>

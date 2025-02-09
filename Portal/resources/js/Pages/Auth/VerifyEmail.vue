@@ -20,17 +20,17 @@ defineProps({
 <template>
 
     <Head>
-        <title> | Weryfikacja maila</title>
+        <title> | Email verification</title>
         <meta head-key="description" name="description" content="Strona z informacją o weryfikacji maila" />
     </Head>
     <PageFloatContainer class="text-center">
         <div>
-            <p>W celu uzyskania dostępu do tej treści zweryfikuj swój adres email.</p>
+            <p>To access this content, verify Your email address</p>
             <p class="text-orange-500">{{ $page.props.status }}</p>
         </div>
         <div class="mt-4">
             <form @submit.prevent="submit">
-                <ConfirmButton :disabled="form.processing">Wyślij ponownie</ConfirmButton>
+                <ConfirmButton :disabled="form.processing">Resend</ConfirmButton>
             </form>
         </div>
     </PageFloatContainer>
