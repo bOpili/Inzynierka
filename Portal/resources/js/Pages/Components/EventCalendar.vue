@@ -22,10 +22,6 @@ const props = defineProps({
     },
 });
 
-// const goToEvent = (eventId) => {
-//     location.href(route('event.show', eventId))
-// }
-
 const dayHeaders = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 const momentEvents = props.events.map(e => ({

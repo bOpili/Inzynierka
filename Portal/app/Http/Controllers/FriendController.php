@@ -12,7 +12,6 @@ class FriendController extends Controller
 {
     public function sendRequest(Request $request, $receiverId)
     {
-
         $sender = User::findOrFail(Auth::id());
 
         if (
@@ -28,7 +27,7 @@ class FriendController extends Controller
             'status' => 'pending',
         ]);
 
-        broadcast(new NotificationNumChange(User::first($receiverId)));
+        broadcast(new NotificationNumChange(User::firstWhere('id','=',$receiverId)));
 
         return back()->with('message', 'Friend request sent successfully');
     }

@@ -20,7 +20,7 @@ const imageSelected = (e) => {
 <template>
 
     <div class="flex h-96 flex-col mt-4 min-w-40 ">
-        <span>Zdjęcie (maksymalny rozmiar 3 Mb)</span>
+        <span>Picture (max size 3 Mb)</span>
         <label for="image" class="overflow-hidden ">
             <img class="object-contain object-center w-full h-full" :src="preview ?? '/storage/Events/DefaultEvent2.webp'">
         </label>

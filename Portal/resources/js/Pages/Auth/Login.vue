@@ -28,28 +28,27 @@ const submit = () => {
 <template>
 
     <Head>
-        <title> | Logowanie</title>
-        <meta head-key="description" name="description" content="Strona logowania użytkownika" />
+        <title> | Login</title>
+        <meta head-key="description" name="description" content="User login page" />
     </Head>
     <PageFloatContainer>
         <div class="flex justify-center my-2">
             <form @submit.prevent="submit" class="grid flex-col w-1/3">
-                <h1 class="justify-self-center mb-4 text-xl">Logowanie</h1>
+                <h1 class="justify-self-center mb-4 text-xl">Login</h1>
                 <TextInput name="Email" type="email" v-model="form.email" :message="form.errors.email" label="Email"></TextInput>
-                <TextInput name="Password" type="password" v-model="form.password" :message="form.errors.password" label="Hasło"> </TextInput>
+                <TextInput name="Password" type="password" v-model="form.password" :message="form.errors.password" label="Password"> </TextInput>
                 <SessionMessage :status="props.status"></SessionMessage>
                 <div class="flex items-center justify-between mt-4">
-                    <p>Nie masz konta? <NavLink routeName="register">Zarejestruj się</NavLink> </p>
-                    <NavLink routeName="password.request">Zapomniałeś hasła?</NavLink>
+                    <p>Need account? <NavLink routeName="register">Register here</NavLink> </p>
+                    <NavLink routeName="password.request">Forgot password?</NavLink>
                 </div>
                 <div class="justify-self-center mt-4">
-                    <CheckBox id="remember" v-model="form.remember">Zapamiętaj mnie</CheckBox>
+                    <CheckBox id="remember" v-model="form.remember">Remember me</CheckBox>
                 </div>
                 <div class="justify-self-center mt-4">
-                    <ConfirmButton :disabled="form.processing">Zaloguj</ConfirmButton>
+                    <ConfirmButton :disabled="form.processing">Login</ConfirmButton>
                 </div>
             </form>
         </div>
     </PageFloatContainer>
-
 </template>

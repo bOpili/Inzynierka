@@ -49,9 +49,9 @@ const formatDate = (date) => {
                 </span>
             </div>
             <div class="grid justify-between items-center ">
-                <span><strong>Data:</strong> {{ formatDate(event.startDate)}}</span>
-                <span><strong>Gra:</strong> {{ event.game.title }}</span>
-                <span><strong>Sloty:</strong> {{ event.users_count + '/' + event.slots }}</span>
+                <span><strong>Date:</strong> {{ formatDate(event.startDate)}}</span>
+                <span><strong>Game:</strong> {{ event.game.title }}</span>
+                <span><strong>Slots:</strong> {{ event.users_count + '/' + event.slots }}</span>
             </div>
         </div>
     </div>

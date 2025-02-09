@@ -10,8 +10,8 @@ const props = defineProps({
 
 <template>
     <Head>
-        <title> | Strona główna</title>
-        <meta head-key="description" name="description" content="Strona główna portalu"/>
+        <title> | Main page</title>
+        <meta head-key="description" name="description" content="Main page"/>
     </Head>
     <div>
         <PageFloatContainer v-if="$page.props.auth.user">
@@ -19,7 +19,7 @@ const props = defineProps({
             <EventCalendar :events="events ? events : []"></EventCalendar>
         </PageFloatContainer>
         <PageFloatContainer v-else>
-            <h1>Strona główna</h1>
+            <h1>Main page</h1>
         </PageFloatContainer>
     </div>
 </template>

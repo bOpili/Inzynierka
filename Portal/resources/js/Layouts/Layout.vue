@@ -38,13 +38,13 @@ if(window.User.id != -1){
 <template>
 
     <Head>
-        <meta head-key="description" name="description" content="Opis domyślny" />
+        <meta head-key="description" name="description" content="Layout of the page" />
     </Head>
     <div>
         <header class="bg-orange-500 dark:bg-orange-700  text-xl text-white w-full">
             <nav class="flex flex-wrap items-center justify-between p-2 space-x-5">
                 <div class="flex flex-wrap space-x-6">
-                    <NavButton routeName="home" pageComp="Home">Strona główna</NavButton>
+                    <NavButton routeName="home" pageComp="Home">Main page</NavButton>
                     <button @click="handleThemeSwitch"
                         class="m-2 text-center ring-1 ring-amber-800 w-11 p-2 rounded-full shadow-lg hover:bg-orange-800 hover:ring-amber-600">
                         <i v-if="theme == 'light'" class="fa-solid fa-moon"></i>
@@ -52,7 +52,7 @@ if(window.User.id != -1){
                     </button>
                 </div>
                 <div class="flex flex-wrap space-x-6">
-                    <NavButton routeName="events" text="Wydarzenia" pageComp="Events">Wydarzenia</NavButton>
+                    <NavButton routeName="events" text="Wydarzenia" pageComp="Events">Events</NavButton>
                 </div>
                 <div v-if="$page.props.auth.user" class="flex flex-wrap justify-between">
                     <Link :href="route('dashboard')" as="button" preserve-scroll class="content-center">
@@ -63,10 +63,10 @@ if(window.User.id != -1){
                         <i class="fa-solid fa-users"></i>
                         <span v-show="non != 0" class="notificationsNumber">{{ non }}</span>
                     </NavIcon>
-                    <NavButton routeName="logout" method="post">Wyloguj</NavButton>
+                    <NavButton routeName="logout" method="post">Log out</NavButton>
                 </div>
                 <div v-else class="flex flex-wrap">
-                    <NavButton routeName="login" text="Logowanie" pageComp="Login">Logowanie</NavButton>
+                    <NavButton routeName="login" text="Login" pageComp="Login">Login</NavButton>
                 </div>
             </nav>
         </header>

@@ -28,19 +28,19 @@ const submit = () => {
 <template>
 
     <Head>
-        <title> | Podaj nowe hasło</title>
+        <title> | Enter new passowrd</title>
         <meta head-key="description" name="description" content="Strona rejestracji nowego użytkownika" />
     </Head>
     <PageFloatContainer>
         <div class="flex justify-center my-2 space-x-32">
             <form @submit.prevent="submit" class="grid w-1/3">
-                <h1 class="justify-self-center mb-4 text-xl">Podaj nowe hasło</h1>
+                <h1 class="justify-self-center mb-4 text-xl">Enter new password</h1>
                 <TextInput name="Email" type="email" v-model="form.email" :message="form.errors.email" label="Email"></TextInput>
-                <TextInput name="Password" type="password" v-model="form.password" :message="form.errors.password" label="Hasło">
+                <TextInput name="Password" type="password" v-model="form.password" :message="form.errors.password" label="Password">
                 </TextInput>
-                <TextInput name="Confirm password" type="password" v-model="form.password_confirmation" label="Potwierdź hasło"></TextInput>
+                <TextInput name="Confirm password" type="password" v-model="form.password_confirmation" label="Confirm password"></TextInput>
                 <div class="justify-self-center mt-4">
-                    <ConfirmButton :disabled="form.processing">Potwierdź</ConfirmButton>
+                    <ConfirmButton :disabled="form.processing">Confirm</ConfirmButton>
                 </div>
             </form>
         </div>
