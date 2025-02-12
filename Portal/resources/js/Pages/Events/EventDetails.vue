@@ -149,6 +149,9 @@ const resetMessage = () => {
             <h1 :class="(userStatus == 2) ? 'col-span-1' : 'col-span-2'">Participants:</h1>
             <h1 v-if="userStatus == 2">Awaiting users:</h1>
             <table class="table-auto border-separate border-spacing-4">
+            <tBody>
+
+
                 <tr v-for="(user, index) in props.users">
                     <td><img class="object-fill ring-1 ring-amber-800 size-11 rounded-full shadow-lg "
                             :src="'/storage/' + user.profilepic" alt="Current user profile picture" /></td>
@@ -168,6 +171,7 @@ const resetMessage = () => {
                         </div>
                     </td>
                 </tr>
+            </tBody>
             </table>
             <table v-if="userStatus == 2" class="table-auto border-separate border-spacing-4">
                 <tr v-for="(user, index) in props.pendingUsers">

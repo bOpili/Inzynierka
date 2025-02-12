@@ -1,3 +1,6 @@
+import formsPlugin from '@tailwindcss/forms';
+import scrollbarHidePlugin from 'tailwind-scrollbar-hide'
+
 /** @type {import('tailwindcss').Config} */
 export default {
     darkMode: "selector",
@@ -14,7 +17,7 @@ export default {
       },
     },
     plugins: [
-        import('@tailwindcss/forms'),
-        import('tailwind-scrollbar-hide')
+        formsPlugin,
+        scrollbarHidePlugin
     ],
   }

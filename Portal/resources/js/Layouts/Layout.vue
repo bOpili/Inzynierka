@@ -24,6 +24,7 @@ const leaveChannel = () => {
 }
 
 watchEffect(() => {
+    console.log("watcheffect")
     non.value = props.notificationNumber;
     if (props.userId != -1) {
         Echo.private('user.' + (props.userId)).listen('NotificationNumChange', (event) => {
