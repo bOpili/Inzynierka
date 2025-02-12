@@ -31,18 +31,10 @@ const handleTags = (tag) => {
     <div class="mt-4">
         <label class="mb-1">{{ label }}</label>
         <div class="flex flex-wrap gap-2">
-            <button
-                v-for="tag in tags"
-                :key="tag.id"
-                @click="handleTags(tag)"
-
-                type="button"
-                :class="{
-                    'bg-orange-500 dark:bg-orange-700 text-white': selectedTags.includes(tag),
-                    'bg-white text-black': !selectedTags.includes(tag),
-                }"
-                class="px-4 py-2 rounded-md border border-gray-700  shadow-sm"
-            >
+            <button v-for="tag in tags" :key="tag.id" @click="handleTags(tag)" type="button" :class="{
+                'bg-orange-500 dark:bg-orange-700 text-white': selectedTags.includes(tag),
+                'bg-white text-black': !selectedTags.includes(tag),
+            }" class="px-4 py-2 rounded-md border border-gray-700  shadow-sm">
                 {{ tag.name }}
             </button>
         </div>

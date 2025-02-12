@@ -27,7 +27,7 @@ class FriendController extends Controller
             'status' => 'pending',
         ]);
 
-        broadcast(new NotificationNumChange(User::firstWhere('id','=',$receiverId)));
+        broadcast(new NotificationNumChange(User::findOrFail($receiverId)));
 
         return back()->with('message', 'Friend request sent successfully');
     }

@@ -12,13 +12,12 @@ return new class extends Migration {
     {
         Schema::create('friend_requests', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('sender_id');
-            $table->unsignedBigInteger('receiver_id');
+            $table->foreignId('sender_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('receiver_id')->constrained('users')->onDelete('cascade');
             $table->string('status')->default('pending'); // pending, accepted, rejected
             $table->timestamps();
 
-            $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('receiver_id')->references('id')->on('users')->onDelete('cascade');
+
             $table->unique(['sender_id', 'receiver_id']);
         });
     }

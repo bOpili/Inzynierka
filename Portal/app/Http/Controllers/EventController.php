@@ -19,6 +19,7 @@ class EventController extends Controller
     public function index(Request $request)
     {
 
+        // dd($request);
         $events = Event::when($request->tags, function ($query) use ($request) {
             foreach ($request->tags as $tag) {
                 $query->whereHas('tags', function ($query) use ($tag) {
@@ -51,12 +52,12 @@ class EventController extends Controller
         $event = Event::findOrFail($request->eventId);
 
         if ($event->users->find(Auth::id())) {
-            return back()->with('message', 'Jesteś już członkiem tego wydarzenia');
+            return back()->with('message', 'You already participate in this event');
         }
 
 
         if ($event->users->count() >= $event->slots) {
-            return back()->with('message', 'Brak wolnych miejsc');
+            return back()->with('message', 'No slots available');
         }
 
         $overlappingEvent = $user->events()
@@ -72,7 +73,7 @@ class EventController extends Controller
 
         $event->users()->attach(Auth::id());
 
-        return back()->with('message', 'Dołączono do wydarzenia');
+        return back()->with('message', 'Join request sent');
     }
 
 
@@ -115,12 +116,11 @@ class EventController extends Controller
 
     public function create()
     {
-        return Inertia::render('Events/EventForm', ['tags' => Tag::get(), 'games' => Game::get()]);
+        return Inertia::render('Events/EventForm', ['tags' => Tag::get(), 'games' => Game::get(), 'timezone' => User::findOrFail(Auth::id())->timezone]);
     }
 
     public function store(StoreEventRequest $request)
     {
-
         $fields = $request->validate([
             "title" => ['required', 'max:255'],
             "description" => ['required'],
@@ -143,13 +143,13 @@ class EventController extends Controller
 
         $event = $request->user()->events()->create($fields);
 
-        foreach ($request->tags as $tag) {
+        if($request->tags){
+            foreach ($request->tags as $tag) {
 
-            $event->tags()->attach($tag['id']);
+                $event->tags()->attach($tag['id']);
+            }
         }
-
-
-
+        
         $event->users()->where('user_id', Auth::id())->update(['status' => 2]);
 
         return redirect()->route('events');
