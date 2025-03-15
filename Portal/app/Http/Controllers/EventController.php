@@ -123,7 +123,7 @@ class EventController extends Controller
     {
         $fields = $request->validate([
             "title" => ['required', 'max:255'],
-            "description" => ['required'],
+            "description" => ['required', 'max:500'],
             "slots" => ['required', 'int'],
             "image" => ['nullable', 'file', 'max:3072', 'mimes:jpeg,jpg,png,webp'],
             "startDate" => ['required', 'date', 'after:now'],
@@ -149,7 +149,7 @@ class EventController extends Controller
                 $event->tags()->attach($tag['id']);
             }
         }
-        
+
         $event->users()->where('user_id', Auth::id())->update(['status' => 2]);
 
         return redirect()->route('events');
