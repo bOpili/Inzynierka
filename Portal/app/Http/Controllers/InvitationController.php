@@ -19,18 +19,21 @@ class InvitationController extends Controller
         $event = Event::findOrFail($request->eventId);
 
         $auth = Gate::inspect('invite', $event);
-        
+
 
         if (!($auth->allowed())) {
             return back()->with(['message' => $auth->message()]);
         }
 
-        if (!Invitation::where('receiver_id', '=', $request->friendId)->where('event_id', '=', $event->id)->where('status', '=', 'pending')->get()->isEmpty()) {
+        if (
+            !Invitation::where('receiver_id', '=', $request->friendId)
+                ->where('event_id', '=', $event->id)->where('status', '=', 'pending')->get()->isEmpty()
+        ) {
             return back()->withErrors(['msg' => 'User already invited']);
         }
-        
 
-        if(!$event->users()->where('user_id',$request->friendId)->get()->isEmpty()){
+
+        if (!$event->users()->where('user_id', $request->friendId)->get()->isEmpty()) {
             return back()->withErrors(['msg' => 'User already participates']);
         }
 
@@ -45,8 +48,9 @@ class InvitationController extends Controller
             ];
 
         Invitation::insert($invitation);
-    
-        broadcast(new NotificationNumChange(User::findOrFail($request->friendId)));
+
+        broadcast(new NotificationNumChange(User::first($request->friendId)));
+
         return back();
     }
 

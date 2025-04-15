@@ -41,12 +41,13 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             // Lazily...
             'auth.user' => fn() => $request->user()
-                ? $request->user()->only('id', 'name', 'profilepic','timezone')
+                ? $request->user()->only('id', 'name', 'profilepic', 'timezone')
                 : null,
             'flash' => [
                 'message' => fn() => $request->session()->get('message')
             ],
-            'notificationNumber' => fn() => $request->user() ? Invitation::where('status', 'pending')->where('receiver_id', $request->user()->id)->count() + FriendRequest::where('status', 'pending')->where('receiver_id', $request->user()->id)->count() : 0,
+            'notificationNumber' => fn() => $request->user() ? Invitation::where('status', 'pending')->where('receiver_id', $request->user()->id)
+                ->count() + FriendRequest::where('status', 'pending')->where('receiver_id', $request->user()->id)->count() : 0,
             'userId' => fn() => $request->user() ? Auth::Id() : -1,
         ]);
     }

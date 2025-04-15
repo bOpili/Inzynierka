@@ -18,8 +18,6 @@ class EventController extends Controller
 {
     public function index(Request $request)
     {
-
-        // dd($request);
         $events = Event::when($request->tags, function ($query) use ($request) {
             foreach ($request->tags as $tag) {
                 $query->whereHas('tags', function ($query) use ($tag) {
@@ -34,7 +32,9 @@ class EventController extends Controller
                     $query->where('title', 'like', "%" . $request->search . "%");
                 }
             )->latest()->withCount(['users'])->paginate(3)->withQueryString();
+
         $events->load('game')->load('tags');
+
         return Inertia::render('Events/Events', [
             'events' => $events,
             'joinMessage' => session('joinMessage'),
@@ -143,7 +143,7 @@ class EventController extends Controller
 
         $event = $request->user()->events()->create($fields);
 
-        if($request->tags){
+        if ($request->tags) {
             foreach ($request->tags as $tag) {
 
                 $event->tags()->attach($tag['id']);
