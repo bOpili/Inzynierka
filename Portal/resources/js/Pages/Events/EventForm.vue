@@ -11,6 +11,7 @@ import SelectInput from '../Components/SelectInput.vue';
 import TagSelector from '../Components/TagSelector.vue';
 import EventDateSelector from '../Components/EventDateSelector.vue';
 import { onBeforeUnmount, onMounted, onUnmounted, ref } from 'vue';
+import moment from 'moment-timezone';
 
 const form = useForm({
     title: null,
@@ -25,6 +26,12 @@ const form = useForm({
     password: null,
 })
 
+const submit = () => {
+    form.startDate = moment.tz(form.startDate, props.timezone).utc().format('YYYY-MM-DD HH:mm:ss');
+    form.endDate = moment.tz(form.endDate, props.timezone).utc().format('YYYY-MM-DD HH:mm:ss');
+    form.post(route('event.store'))
+}
+
 const handleTagSubmit = (selectedTags) => {
     form.tags = selectedTags;
 }
@@ -35,14 +42,18 @@ const handleSelectedPeriod = (period) => {
 };
 
 
-defineProps({
+const props = defineProps({
     games: {
         type: Array
     },
     tags: {
         type: Array
     },
+    timezone: {
+        type: String
+    }
 })
+
 
 </script>
 

@@ -5,32 +5,42 @@ import { route } from '../../../vendor/tightenco/ziggy/src/js';
 import { switchTheme } from '../theme';
 import NavButton from '../Pages/Components/NavButton.vue';
 import NavIcon from '../Pages/Components/NavIcon.vue';
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import moment from 'moment-timezone';
 
 var theme = ref("dark");
 
 const props = defineProps({
     notificationNumber: Number,
+    userId: Number,
 })
 
 let non = ref(props.notificationNumber);
 
+const leaveChannel = () => {
+    if (props.userId != -1) {
+        Echo.leave('private-user.' + (props.userId));
+    }
+}
+
+watchEffect(() => {
+    console.log("watcheffect")
+    non.value = props.notificationNumber;
+    if (props.userId != -1) {
+        Echo.private('user.' + (props.userId)).listen('NotificationNumChange', (event) => {
+            non.value = event.non;
+        })
+    }
+})
+
 const handleThemeSwitch = () => {
-    if(theme.value == 'light'){
+    if (theme.value == 'light') {
         theme.value = 'dark';
-    } else{
+    } else {
         theme.value = 'light';
     }
     switchTheme();
 }
-
-if(window.User.id != -1){
-    Echo.private('user.'+ (window.User.id)).listen('NotificationNumChange', (event) => {
-        non.value = event.non;
-    })
-}
-
 
 
 </script>
@@ -61,9 +71,10 @@ if(window.User.id != -1){
                     </Link>
                     <NavIcon routeName="users">
                         <i class="fa-solid fa-users"></i>
-                        <span v-show="non != 0" class="notificationsNumber">{{ non }}</span>
+                        <span v-show="non != 0" class="notificationsNumber">{{
+                            non }}</span>
                     </NavIcon>
-                    <NavButton routeName="logout" method="post">Log out</NavButton>
+                    <NavButton @click="leaveChannel" routeName="logout" method="post">Log out</NavButton>
                 </div>
                 <div v-else class="flex flex-wrap">
                     <NavButton routeName="login" text="Login" pageComp="Login">Login</NavButton>
@@ -77,7 +88,7 @@ if(window.User.id != -1){
 </template>
 
 <style scoped>
-.notificationsNumber{
+.notificationsNumber {
     position: relative;
     top: 10px;
     right: 5px;
@@ -94,5 +105,4 @@ if(window.User.id != -1){
     line-height: 1;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
 }
-
 </style>

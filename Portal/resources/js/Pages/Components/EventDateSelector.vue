@@ -23,12 +23,11 @@ const dragStartY = ref(null);
 const dragStartX = ref(null);
 const dragStartTime = ref(null);
 
-const emit = defineEmits(['selectedEventTimeframe']);
-
 const dayHeaders = ["Monday", "Tuesday", "Wednesday", "Thursday", "Firday", "Saturday", "Sunday"];
 
-const daysInMonth = computed(() => {
+const emit = defineEmits(['selectedEventTimeframe']);
 
+const daysInMonth = computed(() => {
     const start = currentMonth.value.clone().startOf('month').startOf('week');
     const end = currentMonth.value.clone().endOf('month').endOf('week');
     const days = [];
@@ -122,11 +121,11 @@ const createEvent = (day, hour) => {
     var start = day.clone().hour(hourPart).minute(minutePart);
     var end = start.clone().add(eventDuration.value, 'minutes');
 
-    if(end.day() != start.day()){
-        end.day(end.day()-1);
+    if (end.day() != start.day()) {
+        end.day(end.day() - 1);
         end.hour(23);
         end.minutes(59);
-        start = end.clone().subtract(eventDuration.value - 1,'minutes');
+        start = end.clone().subtract(eventDuration.value - 1, 'minutes');
     }
 
     const newEvent = {
@@ -196,16 +195,6 @@ const endResizing = () => {
     }
 };
 
-const startDragging = (event, e) => {
-    isDragging.value = true;
-    draggingEvent.value = event;
-    dragStartY.value = e.clientY;
-    dragStartX.value = e.clientX;
-    dragStartTime.value = event.start.clone();
-    document.addEventListener('mousemove', handleDragging);
-    document.addEventListener('mouseup', endDragging);
-};
-
 const handleDragging = (e) => {
     if (!isDragging.value || !draggingEvent.value || isResizing.value) return;
 
@@ -229,7 +218,8 @@ const handleDragging = (e) => {
             newEnd.minute(59)
         }
 
-        if (newStart.day() == draggingEvent.value.start.day() && (duration-newEnd.diff(newStart, 'minutes') == 1 || (duration-newEnd.diff(newStart, 'minutes') == 0))) {
+        if (newStart.day() == draggingEvent.value.start.day()
+            && (duration - newEnd.diff(newStart, 'minutes') == 1 || (duration - newEnd.diff(newStart, 'minutes') == 0))) {
             draggingEvent.value.start = newStart;
             draggingEvent.value.end = newEnd;
         }
@@ -237,12 +227,25 @@ const handleDragging = (e) => {
 
 };
 
+const startDragging = (event, e) => {
+    isDragging.value = true;
+    draggingEvent.value = event;
+    dragStartY.value = e.clientY;
+    dragStartX.value = e.clientX;
+    dragStartTime.value = event.start.clone();
+    document.addEventListener('mousemove', handleDragging);
+    document.addEventListener('mouseup', endDragging);
+};
+
 const endDragging = () => {
     if (isDragging.value) {
-        if(draggingEvent.value.end.day() != draggingEvent.value.start.day()){
-            draggingEvent.value.end.subtract(1,'minute');
+        if (draggingEvent.value.end.day() != draggingEvent.value.start.day()) {
+            draggingEvent.value.end.subtract(1, 'minute');
         }
-        emit('selectedEventTimeframe', { start: draggingEvent.value.start.format('YYYY-MM-DD HH:mm:ss'), end: draggingEvent.value.end.format('YYYY-MM-DD HH:mm:ss') });
+        emit('selectedEventTimeframe', {
+            start: draggingEvent.value.start.format('YYYY-MM-DD HH:mm:ss'),
+            end: draggingEvent.value.end.format('YYYY-MM-DD HH:mm:ss')
+        });
         isDragging.value = false;
         draggingEvent.value = null;
         dragStartY.value = null;
@@ -274,12 +277,13 @@ const endDragging = () => {
             </button>
         </div>
 
-        <div v-else-if="currentView === 'week'" class="grid grid-cols-7 place-items-center overflow-auto scrollbar-hide overscroll-contain scrollable">
+        <div v-else-if="currentView === 'week'"
+            class="grid grid-cols-7 place-items-center overflow-auto scrollbar-hide overscroll-contain scrollable">
             <div v-for="day in daysInWeek" :key="day.format('YYYY-MM-DD')"
-            :class="['p-2 w-full relative', day.isSame(today, 'day') ? 'bg-orange-500 bg-opacity-25' : '']">
+                :class="['p-2 w-full relative', day.isSame(today, 'day') ? 'bg-orange-500 bg-opacity-25' : '']">
 
-        <h3 class="text-center mb-4">{{ day.format('ddd, MMM D') }}</h3>
-        </div>
+                <h3 class="text-center mb-4">{{ day.format('ddd, MMM D') }}</h3>
+            </div>
             <div v-for="day in daysInWeek" :key="day.format('YYYY-MM-DD')"
                 :class="['p-2 w-full relative', day.isSame(today, 'day') ? 'bg-orange-500 bg-opacity-25' : '']">
                 <div class="relative">

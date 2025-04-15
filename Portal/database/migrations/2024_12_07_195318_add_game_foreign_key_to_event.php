@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->foreignId('game_id')->constrained()->onDelete('restrict');
+            $table->foreignId('game_id')->constrained('games')->onDelete('restrict');
         });
     }
 

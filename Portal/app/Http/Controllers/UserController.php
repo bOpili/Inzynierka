@@ -22,8 +22,11 @@ class UserController extends Controller
         ]);
 
         if ($request->hasFile('pfp')) {
+            $user = User::findOrFail(Auth::id());
+            if($user->profilepic != "ProfilePictures/defaultpfp.jpg")
+            Storage::disk('public')->delete($user->profilepic);
             $pfp = Storage::disk('public')->put('ProfilePictures',$request->pfp);
-            User::findOrFail(Auth::id())->update(['profilepic' => $pfp]);
+            $user->update(['profilepic' => $pfp]);
         }
 
         if ($request->timezone){

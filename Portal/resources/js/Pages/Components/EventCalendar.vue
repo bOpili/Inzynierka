@@ -149,7 +149,6 @@ const filterEventsForDay = (day) => {
                         {{ hour }}
                     </div>
 
-
                     <Link v-for="event in filterEventsForDay(day)" :key="event.start"
                         :href="route('event.show', event.id)" :style="{
                             top: `${calculateTop(event)}px`,

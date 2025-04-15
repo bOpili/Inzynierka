@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description')->charset('binary');
+            $table->string('description');
             $table->integer('slots')->nullable();
             $table->string('image')->nullable();
             $table->timestamp('startDate')->useCurrent();

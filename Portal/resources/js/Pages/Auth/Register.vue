@@ -40,7 +40,7 @@ const submit = () => {
                 <TextInput name="Password" type="password" v-model="form.password" :message="form.errors.password" label="Password">
                 </TextInput>
                 <TextInput name="Confirm password" type="password" v-model="form.password_confirmation" label="Confirm password"></TextInput>
-                <TimezoneSelectInput name="Timezone" :options="timezones" v-model="form.timezone" :message="form.errors.timezone"
+                <TimezoneSelectInput name="Timezone" v-model="form.timezone" :message="form.errors.timezone"
                     label="Select your timezone"></TimezoneSelectInput>
                 <div class="mt-4">
                     <h1 class="mb-4">Already registered? <NavLink routeName="login">Login here</NavLink></h1>

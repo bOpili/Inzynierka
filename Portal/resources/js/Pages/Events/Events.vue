@@ -42,11 +42,13 @@ const changeFiltersVis = () => {
 const form = useForm({
     tags: null,
     games: null,
+    search: null,
 })
 
 const filter = () => {
     form.tags ? form.tags = form.tags.map((tag) => tag.id) : form.tags;
     form.games ? form.games = form.games.map((game) => game.id) : form.games;
+    form.search = search;
     form.get(route('events'))
 }
 
@@ -59,8 +61,6 @@ const handleGameSubmit = (selectedGames) => {
 };
 
 const resetFilters = () => {
-    props.filteredGames = null;
-    props.filteredTags = null;
     form.tags = null;
     form.games = null;
     router.get("/events");
@@ -78,12 +78,13 @@ const resetFilters = () => {
     <PageFloatContainer>
         <div class="flex flex-row justify-between items-center">
             <p class="text-lg">Events page</p>
-            <div class="space-x-2">
+            <div class="space-x-2 flex items-center">
                 <ConfirmButton v-if="!props.filteredGames && !props.filteredTags" @click.prevent="changeFiltersVis"><i
                         class="fa-solid fa-filter"></i></ConfirmButton>
                 <ConfirmButton v-else @click.prevent="resetFilters"><i class="fa-solid fa-filter-circle-xmark"></i>
                 </ConfirmButton>
-                <input type="search" name="" id="" placeholder="Search" class="text-black rounded-lg" v-model="search">
+                <input type="search" name="" id="" placeholder="Search"
+                    class="rounded-md ring-2 ring-stone-700 pl-1 text-stone-700" v-model="search">
                 <NavButton routeName="event.create">Create event</NavButton>
             </div>
         </div>

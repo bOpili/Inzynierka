@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NotificationNumChange;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -46,8 +45,8 @@ class AuthController extends Controller
 
         if (Auth::attempt($fields, $request->remember)) {
             $request->session()->regenerate();
-
-            return redirect()->intended('/')->with('message', 'Welcome back '.Auth::user()->name);
+            return redirect()->intended('/')->with('message', 'Welcome back '.Auth::user()->name)
+            ->with('userId', Auth::id());
         }
 
         return back()->withErrors([

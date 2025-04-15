@@ -73,9 +73,8 @@ const resetMessage = () => {
     <PageFloatContainer>
         <div class="flex flex-row justify-between items-center">
             <p class="text-lg">Friends list</p>
-            <form @submit.prevent="submit" class="flex flex-row space-x-2">
-                <FilterInput label="Find user by name" type="search" v-model="form.Name" name="Username">
-                </FilterInput>
+            <form @submit.prevent="submit" class="flex flex-row space-x-2 items-center">
+                <FilterInput label="Find user by name" type="search" v-model="form.Name" name="Username" class="flex"></FilterInput>
                 <ConfirmButton>Search</ConfirmButton>
             </form>
         </div>
